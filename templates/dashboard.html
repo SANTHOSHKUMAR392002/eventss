@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Admin Dashboard</h2>
+    <p class="text-center">Overview of events and members</p>
+
+    <div class="row">
+        <!-- Total Events Card -->
+        <div class="col-md-6">
+            <div class="card shadow-lg p-3 mb-4 bg-light text-center">
+                <h4>Total Events: <span class="badge bg-primary">{{ event_count }}</span></h4>
+            </div>
+        </div>
+
+        <!-- Total Members Card -->
+        <div class="col-md-6">
+            <div class="card shadow-lg p-3 mb-4 bg-light text-center">
+                <h4>Total Members: <span class="badge bg-success">{{ member_count }}</span></h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display Events and Member Count -->
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 mb-3 bg-white text-center" 
+                 style="cursor: pointer;" 
+                 onclick="fetchMembers({{ event.id }}, '{{ event.name }}')">
+                <h5 class="text-primary">{{ event.name }}</h5>
+                <span class="badge bg-secondary">Members: {{ event.members_count }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Members List -->
+    <div class="card mt-4 p-4 shadow-lg d-none" id="membersCard">
+        <h4 class="text-center" id="eventTitle">Members List</h4>
+        <table class="table table-bordered mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Member Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody id="membersTableBody">
+                <tr>
+                    <td colspan="4" class="text-center">Select an event to view members</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript to Fetch Members -->
+<script>
+    function fetchMembers(eventId, eventName) {
+        fetch(`/get-members/${eventId}/`)
+            .then(response => response.json())
+            .then(data => {
+                let membersTableBody = document.getElementById("membersTableBody");
+                let membersCard = document.getElementById("membersCard");
+
+                membersTableBody.innerHTML = "";
+                document.getElementById("eventTitle").innerText = `Members of ${eventName}`;
+
+                if (data.members.length > 0) {
+                    data.members.forEach((member, index) => {
+                        let row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${member.name}</td>
+                            <td>${member.email}</td>
+                            <td>${member.phone}</td>
+                        </tr>`;
+                        membersTableBody.innerHTML += row;
+                    });
+                } else {
+                    membersTableBody.innerHTML = `<tr><td colspan="4" class="text-center">No members found.</td></tr>`;
+                }
+
+                membersCard.classList.remove("d-none");
+            });
+    }
+</script>
+
+{% endblock %}

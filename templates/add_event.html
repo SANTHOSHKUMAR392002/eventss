@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Event{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h2 class="mb-4 text-center">Add Event</h2>
+
+        <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_name" class="form-label">Event Name</label>
+                <input type="text" name="name" id="id_name" class="form-control" placeholder="Enter event name" required>
+                <div class="invalid-feedback">Please provide an event name.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_venue" class="form-label">Event Venue</label>
+                <input type="text" name="venue" id="id_venue" class="form-control" placeholder="Enter venue name" required>
+                <div class="invalid-feedback">Please enter the venue.</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="id_start_date" class="form-label">Start Date</label>
+                    <input type="date" name="start_date" id="id_start_date" class="form-control" required>
+                    <div class="invalid-feedback">Select a start date.</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_end_date" class="form-label">End Date</label>
+                    <input type="date" name="end_date" id="id_end_date" class="form-control" required>
+                    <div class="invalid-feedback">Select an end date.</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_status" class="form-label">Event Status</label>
+                <select name="status" id="id_status" class="form-select" required>
+                    <option value="" selected disabled>Select Status</option>
+                    <option value="active">Active</option>
+                    <option value="closed">Closed</option>
+                </select>
+                <div class="invalid-feedback">Please select the event status.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_no_of_members" class="form-label">Number of Members</label>
+                <input type="number" name="no_of_members" id="id_no_of_members" class="form-control" placeholder="Enter number of members" required min="1">
+                <div class="invalid-feedback">Enter a valid number of members.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save Event</button>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap JS for Form Validation -->
+<script>
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

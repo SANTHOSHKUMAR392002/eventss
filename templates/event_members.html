@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Event Members{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4 shadow-lg">
+        <h2 class="text-center">Select Event and View Members</h2>
+
+        <!-- Event Selection Dropdown -->
+        <form method="POST" action="{% url 'event_members_page' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="eventDropdown" class="form-label fw-bold">Select Event</label>
+                <select name="event_id" id="eventDropdown" class="form-select">
+                    <option value="">-- Select an Event --</option>
+                    {% for event in events %}
+                        <option value="{{ event.id }}">{{ event.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">OK</button>
+        </form>
+
+        <!-- Display Members if an Event is Selected -->
+        {% if members %}
+            <h3 class="mt-4">Members of Selected Event:</h3>
+            <ul class="list-group mt-2">
+                {% for member in members %}
+                    <li class="list-group-item">
+                        {{ member.name }} - {{ member.email }} - {{ member.phone }}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No members found for this event.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
