@@ -2,8 +2,8 @@ from django.urls import path
 from .views import admin_login, admin_logout, dashboard, event_create, add_event, event_list, event_update, event_delete, member_list, event_members_page
 
 urlpatterns = [
-    path("/", admin_login, name="admin-login"),
-    path("admin-logout/", admin_logout, name="admin-logout"),  
+    path("login/", admin_login, name="admin-login"),
+    path("logout/", admin_logout, name="admin-logout"),  
     path("dashboard/", dashboard, name="dashboard"),
     path('event-create/', event_create, name='event-create'),
     path('add-event/', add_event, name='add-event'),
